@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
     private Connection connection;
@@ -35,7 +37,7 @@ public class UserDAO {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    int userId = rs.getInt("user_id");
+                    int userId = rs.getInt("id");
                     String userUsername = rs.getString("username");
                     String userPassword = rs.getString("password");
                     String userEmail = rs.getString("email");
@@ -58,20 +60,43 @@ public class UserDAO {
         return null;
     }
 
-    public boolean saveUser(User user) throws SQLException {
-        String sql = "INSERT INTO users(username, password, email, role_id) VALUES(?, ?, ?, ?)";
+    public List<User> getAllUsers() throws SQLException {
+        String query = "SELECT * FROM users";
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int userId = rs.getInt("id");
+                String userUsername = rs.getString("username");
+                String userPassword = rs.getString("password");
+                String userEmail = rs.getString("email");
+                String userRole = rs.getString("role");
+                int userRoleId = rs.getInt("role_id");
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
-            ps.setString(3, user.getEmail());
-            ps.setInt(4, user.getRole_id());
+                switch (userRole.toLowerCase()) {
+                    case "buyer":
+                        users.add(new Buyer(userId, userUsername, userPassword, userEmail, userRole, userRoleId));
+                        break;
+                    case "seller":
+                        users.add(new Seller(userId, userUsername, userPassword, userEmail, userRole, userRoleId));
+                        break;
+                    case "admin":
+                        users.add(new Admin(userId, userUsername, userPassword, userEmail, userRole, userRoleId));
+                        break;
+                    default:
+                        throw new SQLException("Unknown user role: " + userRole);
+                }
+            }
+        }
+        return users;
+    }
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    public boolean deleteUser(String username) throws SQLException {
+        String query = "DELETE FROM users WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
         }
     }
 }

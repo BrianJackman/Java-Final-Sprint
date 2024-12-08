@@ -4,21 +4,28 @@ import com.ecommerce.model.User;
 import com.ecommerce.model.Buyer;
 import com.ecommerce.model.Seller;
 import com.ecommerce.model.Admin;
+import com.ecommerce.model.Product;
 import com.ecommerce.service.UserService;
+import com.ecommerce.service.ProductService;
+import com.ecommerce.DatabaseConnection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
     private UserService userService;
+    private ProductService productService;
 
-    public Menu(UserService userService) {
+    public Menu(UserService userService, ProductService productService) {
         this.userService = userService;
+        this.productService = productService;
     }
 
     public void displayMenu() {
+        System.out.println("Displaying main menu..."); // Debugging statement
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -45,6 +52,7 @@ public class Menu {
     }
 
     private void registerUser(Scanner scanner) {
+        System.out.println("Registering user..."); // Debugging statement
         System.out.println("Enter username:");
         String username = scanner.nextLine();
         System.out.println("Enter password:");
@@ -77,11 +85,12 @@ public class Menu {
         } catch (SQLException e) {
             System.out.println("Error registering user: " + e.getMessage());
         } catch (Exception e) {
-                System.out.println("An unexpected error occurred: " + e.getMessage());
-            }
+            System.out.println("An unexpected error occurred: " + e.getMessage());
         }
+    }
 
     private void loginUser(Scanner scanner) {
+        System.out.println("Logging in user..."); // Debugging statement
         System.out.println("Enter username:");
         String username = scanner.nextLine();
         System.out.println("Enter password:");
@@ -103,17 +112,18 @@ public class Menu {
     }
 
     private void displayRoleBasedMenu(User user) {
+        System.out.println("Displaying role-based menu..."); // Debugging statement
         Scanner scanner = new Scanner(System.in);
         if (user.getRole().equalsIgnoreCase("buyer")) {
-            displayBuyerMenu(scanner);
+            displayBuyerMenu(scanner, user);
         } else if (user.getRole().equalsIgnoreCase("seller")) {
-            displaySellerMenu(scanner);
+            displaySellerMenu(scanner, user);
         } else if (user.getRole().equalsIgnoreCase("admin")) {
             displayAdminMenu(scanner);
         }
     }
 
-    private void displayBuyerMenu(Scanner scanner) {
+    private void displayBuyerMenu(Scanner scanner, User user) {
         while (true) {
             System.out.println("1. Browse products");
             System.out.println("2. Search for a product");
@@ -124,13 +134,13 @@ public class Menu {
 
             switch (choice) {
                 case 1:
-                    // Browse products logic
+                    browseProducts();
                     break;
                 case 2:
-                    // Search for a product logic
+                    searchProduct(scanner);
                     break;
                 case 3:
-                    // View product info logic
+                    viewProductInfo(scanner);
                     break;
                 case 4:
                     return;
@@ -140,7 +150,7 @@ public class Menu {
         }
     }
 
-    private void displaySellerMenu(Scanner scanner) {
+    private void displaySellerMenu(Scanner scanner, User user) {
         while (true) {
             System.out.println("1. Add product");
             System.out.println("2. Update product");
@@ -152,16 +162,16 @@ public class Menu {
 
             switch (choice) {
                 case 1:
-                    // Add product logic
+                    addProduct(scanner, user);
                     break;
                 case 2:
-                    // Update product logic
+                    updateProduct(scanner, user);
                     break;
                 case 3:
-                    // Delete product logic
+                    deleteProduct(scanner, user);
                     break;
                 case 4:
-                    // View my products logic
+                    viewMyProducts(user);
                     break;
                 case 5:
                     return;
@@ -182,13 +192,13 @@ public class Menu {
 
             switch (choice) {
                 case 1:
-                    // View all users logic
+                    viewAllUsers();
                     break;
                 case 2:
-                    // Delete user logic
+                    deleteUser(scanner);
                     break;
                 case 3:
-                    // View all products logic
+                    viewAllProducts();
                     break;
                 case 4:
                     return;
@@ -198,12 +208,171 @@ public class Menu {
         }
     }
 
+    private void browseProducts() {
+        try {
+            List<Product> products = productService.getAllProducts();
+            for (Product product : products) {
+                System.out.println(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error browsing products: " + e.getMessage());
+        }
+    }
+
+    private void searchProduct(Scanner scanner) {
+        System.out.println("Enter product name to search:");
+        String productName = scanner.nextLine();
+        try {
+            List<Product> products = productService.searchProductsByName(productName);
+            for (Product product : products) {
+                System.out.println(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error searching for product: " + e.getMessage());
+        }
+    }
+
+    private void viewProductInfo(Scanner scanner) {
+        System.out.println("Enter product ID to view info:");
+        int productId = getIntInput(scanner);
+        if (productId == -1) return;
+        try {
+            Product product = productService.getProductById(productId);
+            if (product != null) {
+                System.out.println(product);
+            } else {
+                System.out.println("Product not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error viewing product info: " + e.getMessage());
+        }
+    }
+
+    private void addProduct(Scanner scanner, User user) {
+        System.out.println("Enter product name:");
+        String name = scanner.nextLine();
+        System.out.println("Enter product price:");
+        double price = scanner.nextDouble();
+        System.out.println("Enter product quantity:");
+        int quantity = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        Product product = new Product(name, price, quantity, user.getUser_id());
+
+        try {
+            productService.addProduct(product);
+            System.out.println("Product added successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error adding product: " + e.getMessage());
+        }
+    }
+
+    private void updateProduct(Scanner scanner, User user) {
+        System.out.println("Enter product ID to update:");
+        int productId = getIntInput(scanner);
+        if (productId == -1) return;
+        System.out.println("Enter new product name:");
+        String name = scanner.nextLine();
+        System.out.println("Enter new product price:");
+        double price = scanner.nextDouble();
+        System.out.println("Enter new product quantity:");
+        int quantity = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        Product product = new Product(productId, name, price, quantity, user.getUser_id());
+
+        try {
+            productService.updateProduct(product);
+            System.out.println("Product updated successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error updating product: " + e.getMessage());
+        }
+    }
+
+    private void deleteProduct(Scanner scanner, User user) {
+        System.out.println("Enter product ID to delete:");
+        int productId = getIntInput(scanner);
+        if (productId == -1) return;
+
+        try {
+            productService.deleteProduct(productId);
+            System.out.println("Product deleted successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting product: " + e.getMessage());
+        }
+    }
+
+    private void viewMyProducts(User user) {
+        try {
+            List<Product> products = productService.getProductsBySeller(user.getUser_id());
+            for (Product product : products) {
+                System.out.println(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error viewing your products: " + e.getMessage());
+        }
+    }
+
+    private void viewAllUsers() {
+        try {
+            List<User> users = userService.getAllUsers();
+            for (User user : users) {
+                System.out.println(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error viewing users: " + e.getMessage());
+        }
+    }
+
+    private void deleteUser(Scanner scanner) {
+        System.out.println("Enter username of the user to delete:");
+        String username = scanner.nextLine();
+        try {
+            boolean deleted = userService.deleteUser(username);
+            if (deleted) {
+                System.out.println("User deleted successfully.");
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deleting user: " + e.getMessage());
+        }
+    }
+
+    private void viewAllProducts() {
+        try {
+            List<Product> products = productService.getAllProducts();
+            for (Product product : products) {
+                System.out.println(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error viewing products: " + e.getMessage());
+        }
+    }
+
+    private int getIntInput(Scanner scanner) {
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid integer.");
+            scanner.nextLine(); // Consume the invalid input
+            return -1;
+        }
+    }
+
     public static void main(String[] args) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/ecommerce", "yourusername", "yourpassword");
-            UserService userService = new UserService(connection);
-            Menu menu = new Menu(userService);
-            menu.displayMenu();
+            System.out.println("Connecting to the database..."); // Debugging statement
+            Connection connection = DatabaseConnection.getConnection();
+            if (connection != null) {
+                System.out.println("Connected to the database!");
+                UserService userService = new UserService(connection);
+                ProductService productService = new ProductService(connection);
+                Menu menu = new Menu(userService, productService);
+                menu.displayMenu();
+            } else {
+                System.out.println("Failed to connect to the database.");
+            }
         } catch (SQLException e) {
             System.out.println("Error connecting to the database: " + e.getMessage());
         }

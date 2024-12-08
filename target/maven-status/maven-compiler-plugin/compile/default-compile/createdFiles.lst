@@ -1,2 +1,13 @@
-com/ecommerce/App.class
+com/ecommerce/model/Product.class
+com/ecommerce/dao/ProductDAO.class
+com/ecommerce/model/Admin.class
+com/ecommerce/dao/ConcreteUser.class
+com/ecommerce/service/UserService.class
 com/ecommerce/DatabaseConnection.class
+com/ecommerce/dao/UserDAO.class
+com/ecommerce/cli/Menu.class
+com/ecommerce/App.class
+com/ecommerce/model/Buyer.class
+com/ecommerce/service/ProductService.class
+com/ecommerce/model/Seller.class
+com/ecommerce/model/User.class
