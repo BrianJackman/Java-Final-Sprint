@@ -5,7 +5,7 @@ public class Product {
     private String name;
     private double price;
     private int quantity;
-    private int sellerId;
+    private int sellerId; // Ensure sellerId is an int
 
     public Product() {}
 

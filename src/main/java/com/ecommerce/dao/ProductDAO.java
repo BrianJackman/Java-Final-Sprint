@@ -22,7 +22,7 @@ public class ProductDAO {
             stmt.setString(1, product.getName());
             stmt.setDouble(2, product.getPrice());
             stmt.setInt(3, product.getQuantity());
-            stmt.setInt(4, product.getSellerId());
+            stmt.setInt(4, product.getSellerId()); // Ensure sellerId is an int in Product class
             int rows = stmt.executeUpdate();
             return rows > 0;
         }
