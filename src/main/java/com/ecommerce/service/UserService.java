@@ -18,7 +18,7 @@ public class UserService {
     public void registerUser(User user) throws SQLException {
         // Hash the password before saving the user
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        System.out.println("Hashed password during registration: " + hashedPassword); // Debugging statement
+        // System.out.println("Hashed password during registration: " + hashedPassword); // Debugging statement
         user.setPassword(hashedPassword);
         userDAO.addUser(user);
     }
@@ -26,15 +26,15 @@ public class UserService {
     public boolean authenticateUser(String username, String password) throws SQLException {
         User user = userDAO.getUserByUsername(username);
         if (user != null) {
-            System.out.println("User found: " + user.getUsername()); // Debugging statement
-            System.out.println("Stored hashed password: " + user.getPassword()); // Debugging statement
+            // System.out.println("User found: " + user.getUsername()); // Debugging statement
+            // System.out.println("Stored hashed password: " + user.getPassword()); // Debugging statement
             if (BCrypt.checkpw(password, user.getPassword())) {
                 return true;
             } else {
-                System.out.println("Password does not match."); // Debugging statement
+                // System.out.println("Password does not match."); // Debugging statement
             }
         } else {
-            System.out.println("User not found."); // Debugging statement
+            // System.out.println("User not found."); // Debugging statement
         }
         return false;
     }
