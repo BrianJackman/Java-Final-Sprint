@@ -1,0 +1,51 @@
+@options
+@packages
+-classpath
+'/Users/student/.m2/repository/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar:/Users/student/.m2/repository/org/mindrot/jbcrypt/0.4/jbcrypt-0.4.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'1.8'
+-sourcepath
+'/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2024. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'ecommerce-platform 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'ecommerce-platform 1.0-SNAPSHOT API'
+com.ecommerce
+com.ecommerce.dao
+com.ecommerce.cli
+com.ecommerce.model
+com.ecommerce.service
+/Users/student/.m2/repository/org/postgresql/postgresql/42.2.5/postgresql-42.2.5.jar = 1535384600000
+/Users/student/.m2/repository/org/mindrot/jbcrypt/0.4/jbcrypt-0.4.jar = 1487010211000
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/src/main/java/.DS_Store = 1733678995246
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/src/main/java = 1733678990232
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/tag-search-index.js = 1733934896108
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/overview-tree.html = 1733934896098
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/module-search-index.js = 1733934896107
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/index.html = 1733934896099
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/package-search-index.js = 1733934896107
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/index-all.html = 1733934896123
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/allpackages-index.html = 1733934896106
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/member-search-index.js = 1733934896108
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/overview-summary.html = 1733934896124
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/help-doc.html = 1733934896128
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/element-list = 1733934896057
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/search.html = 1733934896124
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/allclasses-index.html = 1733934896105
+/Users/student/Documents/Java/Sprint 2/Java-Final-Sprint/ecommerce-platform/target/site/apidocs/type-search-index.js = 1733934896107

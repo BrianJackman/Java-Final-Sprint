@@ -9,13 +9,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for product-related database operations.
+ */
 public class ProductDAO {
     private Connection connection;
 
+    /**
+     * Constructs a new ProductDAO.
+     *
+     * @param connection the database connection
+     */
     public ProductDAO(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Adds a new product to the database.
+     *
+     * @param product the product to add
+     * @throws SQLException if a database access error occurs
+     */
     public void addProduct(Product product) throws SQLException {
         String query = "INSERT INTO products (name, price, quantity, seller_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -27,6 +41,12 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Updates an existing product in the database.
+     *
+     * @param product the product to update
+     * @throws SQLException if a database access error occurs
+     */
     public void updateProduct(Product product) throws SQLException {
         String query = "UPDATE products SET name = ?, price = ?, quantity = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -38,6 +58,12 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Deletes a product by ID.
+     *
+     * @param productId the product ID
+     * @throws SQLException if a database access error occurs
+     */
     public void deleteProduct(int productId) throws SQLException {
         String query = "DELETE FROM products WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -46,6 +72,13 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Retrieves a product by ID.
+     *
+     * @param productId the product ID
+     * @return the product, or null if not found
+     * @throws SQLException if a database access error occurs
+     */
     public Product getProductById(int productId) throws SQLException {
         String query = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -65,6 +98,12 @@ public class ProductDAO {
         return null;
     }
 
+    /**
+     * Retrieves all products from the database.
+     *
+     * @return a list of all products
+     * @throws SQLException if a database access error occurs
+     */
     public List<Product> getAllProducts() throws SQLException {
         String query = "SELECT * FROM products";
         List<Product> products = new ArrayList<>();
@@ -83,6 +122,13 @@ public class ProductDAO {
         return products;
     }
 
+    /**
+     * Searches for products by name.
+     *
+     * @param productName the product name
+     * @return a list of products matching the name
+     * @throws SQLException if a database access error occurs
+     */
     public List<Product> searchProductsByName(String productName) throws SQLException {
         String query = "SELECT * FROM products WHERE name ILIKE ?";
         List<Product> products = new ArrayList<>();
@@ -103,6 +149,13 @@ public class ProductDAO {
         return products;
     }
 
+    /**
+     * Retrieves products by seller ID.
+     *
+     * @param sellerId the seller ID
+     * @return a list of products by the seller
+     * @throws SQLException if a database access error occurs
+     */
     public List<Product> getProductsBySeller(int sellerId) throws SQLException {
         String query = "SELECT * FROM products WHERE seller_id = ?";
         List<Product> products = new ArrayList<>();

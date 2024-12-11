@@ -12,13 +12,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for user-related database operations.
+ */
 public class UserDAO {
     private Connection connection;
 
+    /**
+     * Constructs a new UserDAO.
+     *
+     * @param connection the database connection
+     */
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Adds a new user to the database.
+     *
+     * @param user the user to add
+     * @throws SQLException if a database access error occurs
+     */
     public void addUser(User user) throws SQLException {
         String query = "INSERT INTO users (username, password, email, role, role_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -31,6 +45,13 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Retrieves a user by username.
+     *
+     * @param username the username
+     * @return the user, or null if not found
+     * @throws SQLException if a database access error occurs
+     */
     public User getUserByUsername(String username) throws SQLException {
         String query = "SELECT * FROM users WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -60,6 +81,12 @@ public class UserDAO {
         return null;
     }
 
+    /**
+     * Retrieves all users from the database.
+     *
+     * @return a list of all users
+     * @throws SQLException if a database access error occurs
+     */
     public List<User> getAllUsers() throws SQLException {
         String query = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
@@ -91,6 +118,13 @@ public class UserDAO {
         return users;
     }
 
+    /**
+     * Deletes a user by username.
+     *
+     * @param username the username
+     * @return true if the user was deleted, false otherwise
+     * @throws SQLException if a database access error occurs
+     */
     public boolean deleteUser(String username) throws SQLException {
         String query = "DELETE FROM users WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {

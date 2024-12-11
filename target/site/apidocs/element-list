@@ -1,0 +1,5 @@
+com.ecommerce
+com.ecommerce.cli
+com.ecommerce.dao
+com.ecommerce.model
+com.ecommerce.service

@@ -15,15 +15,27 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Provides the console-based user interface for interacting with the application.
+ */
 public class Menu {
     private UserService userService;
     private ProductService productService;
 
+    /**
+     * Constructs a new Menu.
+     *
+     * @param userService the service for user-related operations
+     * @param productService the service for product-related operations
+     */
     public Menu(UserService userService, ProductService productService) {
         this.userService = userService;
         this.productService = productService;
     }
 
+    /**
+     * Displays the main menu.
+     */
     public void displayMenu() {
         System.out.println("Displaying main menu..."); // Debugging statement
         Scanner scanner = new Scanner(System.in);
@@ -51,6 +63,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Handles user registration.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void registerUser(Scanner scanner) {
         System.out.println("Registering user..."); // Debugging statement
         System.out.println("Enter username:");
@@ -89,6 +106,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Handles user login.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void loginUser(Scanner scanner) {
         System.out.println("Logging in user..."); // Debugging statement
         System.out.println("Enter username:");
@@ -111,6 +133,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the menu based on the user's role.
+     *
+     * @param user the logged-in user
+     */
     private void displayRoleBasedMenu(User user) {
         System.out.println("Displaying role-based menu..."); // Debugging statement
         Scanner scanner = new Scanner(System.in);
@@ -123,6 +150,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the buyer menu.
+     *
+     * @param scanner the scanner to read user input
+     * @param user the logged-in buyer
+     */
     private void displayBuyerMenu(Scanner scanner, User user) {
         while (true) {
             System.out.println("1. Browse products");
@@ -150,6 +183,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the seller menu.
+     *
+     * @param scanner the scanner to read user input
+     * @param user the logged-in seller
+     */
     private void displaySellerMenu(Scanner scanner, User user) {
         while (true) {
             System.out.println("1. Add product");
@@ -181,6 +220,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Displays the admin menu.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void displayAdminMenu(Scanner scanner) {
         while (true) {
             System.out.println("1. View all users");
@@ -208,6 +252,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows buyers to browse products.
+     */
     private void browseProducts() {
         try {
             List<Product> products = productService.getAllProducts();
@@ -219,6 +266,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows buyers to search for products.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void searchProduct(Scanner scanner) {
         System.out.println("Enter product name to search:");
         String productName = scanner.nextLine();
@@ -232,6 +284,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows buyers to view product information.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void viewProductInfo(Scanner scanner) {
         System.out.println("Enter product ID to view info:");
         int productId = getIntInput(scanner);
@@ -248,6 +305,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows sellers to add products.
+     *
+     * @param scanner the scanner to read user input
+     * @param user the logged-in seller
+     */
     private void addProduct(Scanner scanner, User user) {
         System.out.println("Enter product name:");
         String name = scanner.nextLine();
@@ -267,6 +330,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows sellers to update products.
+     *
+     * @param scanner the scanner to read user input
+     * @param user the logged-in seller
+     */
     private void updateProduct(Scanner scanner, User user) {
         System.out.println("Enter product ID to update:");
         int productId = getIntInput(scanner);
@@ -289,6 +358,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows sellers to delete products.
+     *
+     * @param scanner the scanner to read user input
+     * @param user the logged-in seller
+     */
     private void deleteProduct(Scanner scanner, User user) {
         System.out.println("Enter product ID to delete:");
         int productId = getIntInput(scanner);
@@ -302,6 +377,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows sellers to view their products.
+     *
+     * @param user the logged-in seller
+     */
     private void viewMyProducts(User user) {
         try {
             List<Product> products = productService.getProductsBySeller(user.getUser_id());
@@ -313,6 +393,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows admins to view all users.
+     */
     private void viewAllUsers() {
         try {
             List<User> users = userService.getAllUsers();
@@ -324,6 +407,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows admins to delete users.
+     *
+     * @param scanner the scanner to read user input
+     */
     private void deleteUser(Scanner scanner) {
         System.out.println("Enter username of the user to delete:");
         String username = scanner.nextLine();
@@ -339,6 +427,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Allows admins to view all products.
+     */
     private void viewAllProducts() {
         try {
             List<Product> products = productService.getAllProducts();
@@ -350,6 +441,12 @@ public class Menu {
         }
     }
 
+    /**
+     * Reads an integer input from the scanner and handles invalid input.
+     *
+     * @param scanner the scanner to read user input
+     * @return the integer input, or -1 if the input is invalid
+     */
     private int getIntInput(Scanner scanner) {
         try {
             return scanner.nextInt();
@@ -360,6 +457,11 @@ public class Menu {
         }
     }
 
+    /**
+     * The main method to start the application.
+     *
+     * @param args the command-line arguments
+     */
     public static void main(String[] args) {
         try {
             System.out.println("Connecting to the database..."); // Debugging statement
